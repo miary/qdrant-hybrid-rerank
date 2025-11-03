@@ -147,7 +147,7 @@ def build_rag_prompt(query, retrieved_docs):
         context += f"Question: {doc.payload['question']}\n"
         context += f"Answer: {doc.payload['answer']}\n"
     
-    prompt = f"""You are a helpful medical assistant. Use the following retrieved documents to answer the user's question. If the documents don't contain relevant information, say so and provide a general response based on your knowledge. Your response should be uniquely based on the document content and nothing else. Do not mention the document or source. Do not provide general information. Do not offer any suggestions.
+    prompt = f"""You are a helpful medical assistant. Use the following retrieved documents to answer the user's question. If the documents do not contain relevant information, say so. If the documents are empty, say that You do not know. Your response should be uniquely based on the document content and nothing else. Do not mention the document or source. Do not provide general information. Do not offer any suggestions.
 
 Retrieved Context:
 {context}
