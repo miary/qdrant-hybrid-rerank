@@ -58,24 +58,28 @@ def get_sparse_vector(text: str) -> models.SparseVector:
 
 # --- 3. DATA INGESTION ---
 
-print(f"Creating collection '{COLLECTION_NAME}'...")
+print(f"Creating/Checking collection '{COLLECTION_NAME}'...")
 # Create the collection with both dense and sparse vector configurations
-client.recreate_collection(
-    collection_name=COLLECTION_NAME,
-    vectors_config={
-        "dense": models.VectorParams(
-            size=1024,
-            distance=models.Distance.COSINE
-        )
-    },
-    sparse_vectors_config={
-        "sparse": models.SparseVectorParams(
-            index=models.SparseIndexParams(
-                on_disk=True,
+if not client.collection_exists(COLLECTION_NAME):
+    client.create_collection(
+        collection_name=COLLECTION_NAME,
+        vectors_config={
+            "vect_dense": models.VectorParams(
+                size=1024,
+                distance=models.Distance.COSINE
             )
-        )
-    }
-)
+        },
+        sparse_vectors_config={
+            "vect_sparse": models.SparseVectorParams(
+                index=models.SparseIndexParams(
+                    on_disk=True,
+                )
+            )
+        }
+    )
+    print(f"Collection '{COLLECTION_NAME}' created.")
+else:
+    print(f"Collection '{COLLECTION_NAME}' already exists.")
 
 # Load the dataset from Hugging Face
 print("Loading MedicationQA dataset from Hugging Face...")
